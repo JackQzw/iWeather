@@ -58,18 +58,24 @@ public class ChooseAreaActivity extends Activity {
 
 	// 选中的级别
 	private int currentLevel;
+	
+	//是否是从天气页面跳转回来的
+	
+	private boolean isFromWeatherActivity;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
+		
+		isFromWeatherActivity = getIntent().getBooleanExtra("from_weather_activity", false);
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-//		if(prefs.getBoolean("city_selected", false))
-//		{
-//			Intent intent = new Intent(this, WeatherActivity.class);
-//			startActivity(intent);
-//			finish();
-//		}
+		if(prefs.getBoolean("city_selected", false) && !isFromWeatherActivity)
+		{
+			Intent intent = new Intent(this, WeatherActivity.class);
+			startActivity(intent);
+			finish();
+		}
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.choose_area);
 
@@ -276,6 +282,11 @@ public class ChooseAreaActivity extends Activity {
 		}
 		else
 		{
+			if(isFromWeatherActivity)
+			{
+				Intent intent = new Intent(this, WeatherActivity.class);
+				startActivity(intent);
+			}
 			finish();
 		}
 	}
