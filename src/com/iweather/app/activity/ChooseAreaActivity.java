@@ -14,7 +14,10 @@ import com.iweather.app.util.Utility;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.Window;
@@ -60,6 +63,13 @@ public class ChooseAreaActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
+		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+//		if(prefs.getBoolean("city_selected", false))
+//		{
+//			Intent intent = new Intent(this, WeatherActivity.class);
+//			startActivity(intent);
+//			finish();
+//		}
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.choose_area);
 
@@ -83,6 +93,16 @@ public class ChooseAreaActivity extends Activity {
 				} else if (currentLevel == LEVEL_CITY) {
 					selectedCity = cityList.get(position);
 					queryCounties();
+				}else if(currentLevel == LEVEL_COUNTY)
+				{
+					Intent intent = new Intent(ChooseAreaActivity.this, WeatherActivity.class);
+					
+					County county = countyList.get(position);
+					String countyCode = county.getCountyCode();
+					intent.putExtra("county_code", countyCode);
+					
+					startActivity(intent);
+					finish();
 				}
 			}
 		});
